@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Ad Generator</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<h1>Ad Generator</h1>
+
+<section class="ad-form">
+  <h2>Input</h2>
+  <form id="adForm">
+    <label>
+      Brandnavn:
+      <input id="brandInput" type="text" value="Marmalade Co.">
+    </label>
+
+    <label>
+      Overskrift:
+      <textarea id="headlineInput">LAGERSALG PÅ\nUDVALGTE\nPRODUKTER</textarea>
+    </label>
+
+    <label>
+      Undertekst (grøn):
+      <input id="sublineInput" type="text" value="Kun i dag!!">
+    </label>
+
+    <label>
+      Rabat-tekst:
+      <input id="discountInput" type="text" value="60% rabat">
+    </label>
+
+    <label>
+      Modeltekst (nederst):
+      <input id="sizeInfoInput" type="text" value="Cauan 193 cm bruger str. L.">
+    </label>
+
+    <label>
+      Trustpilot-tekst:
+      <input id="trustInput" type="text" value="4,8 stjerner på Trustpilot">
+    </label>
+
+    <label>
+      Produktbillede:
+      <input id="imageInput" type="file" accept="image/*">
+    </label>
+
+    <button type="submit">Generér annonce</button>
+  </form>
+</section>
+
+<section class="ad-preview">
+  <h2>Preview</h2>
+
+  <div class="ad">
+    <div class="ad-left">
+      <img id="productImage" src="placeholder-model.jpg" alt="Model">
+      <div class="size-bar" id="sizeInfo">Cauan 193 cm bruger str. L.</div>
+    </div>
+
+    <div class="ad-right">
+      <div class="ad-header">
+        <div class="brand-logo" id="brandName">Marmalade Co.</div>
+        <div class="brand-sub">OFFICIEL FORHANDLER AF<br>FRUIT OF THE LOOM</div>
+      </div>
+
+      <div class="ad-main">
+        <h2 id="headline">
+          LAGERSALG PÅ<br>
+          UDVALGTE<br>
+          PRODUKTER
+        </h2>
+        <p class="highlight" id="subline">Kun i dag!!</p>
+      </div>
+
+      <div class="ad-discount" id="discountText">60% rabat</div>
+
+      <div class="ad-footer">
+        <div class="trust-stars">
+          ★★★★★
+        </div>
+        <div class="trust-text" id="trustText">4,8 stjerner på Trustpilot</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<script src="js/script.js"></script>
+</body>
+</html>
