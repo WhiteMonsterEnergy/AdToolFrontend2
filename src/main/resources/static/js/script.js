@@ -13,8 +13,10 @@ form.addEventListener('submit', async (e) => {
     const trust = document.getElementById('trustInput').value;
     const imageFile = document.getElementById('imageInput').files[0];
 
+    // Beholder \n → <br> konverteringen
     const headlineHtml = headlineRaw.split("\\n").join("<br>");
 
+    // Preview opdatering
     document.getElementById('brandName').textContent = brand;
     document.getElementById('subline').textContent = subline;
     document.getElementById('discountText').textContent = discount;
@@ -22,12 +24,22 @@ form.addEventListener('submit', async (e) => {
     document.getElementById('trustText').textContent = trust;
     document.getElementById('headline').innerHTML = headlineHtml;
 
+    // Lokalt billede preview
     if (imageFile) {
         const url = URL.createObjectURL(imageFile);
         document.getElementById('productImage').src = url;
     }
 
+    // ⚠️ OPDATERET PAYLOAD – matcher din nye AdRequest
     const payload = {
+        brand: brand,
+        headline: headlineRaw,
+        subline: subline,
+        discount: discount,
+        sizeInfo: sizeInfo,
+        trustText: trust,
+
+        // Prompt er valgfri → backend/AI kan bruge det senere
         prompt: `
 Brand: ${brand}
 Headline: ${headlineRaw}
@@ -48,13 +60,17 @@ TrustText: ${trust}
         });
 
         if (!response.ok) {
-            throw new Error();
+            throw new Error("Fejl ved backend-call");
         }
 
         const data = await response.json();
 
+        // Backend kan overskrive felterne – ellers bruger vi fallback
         document.getElementById('brandName').textContent = data.brandName || brand;
-        document.getElementById('headline').innerHTML = (data.headline || headlineRaw).split("\\n").join("<br>");
+
+        const finalHeadline = data.headline || headlineRaw;
+        document.getElementById('headline').innerHTML = finalHeadline.split("\\n").join("<br>");
+
         document.getElementById('subline').textContent = data.subline || subline;
         document.getElementById('discountText').textContent = data.discountText || discount;
         document.getElementById('sizeInfo').textContent = data.sizeInfo || sizeInfo;
