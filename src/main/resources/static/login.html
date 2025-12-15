@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>AdTool – Log ind</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="logo">AdTool</div>
+    <a href="index.html" class="back-link">← Tilbage</a>
+</header>
+
+<main class="hero">
+    <h1>Log ind</h1>
+    <p class="subtitle">Indtast dine loginoplysninger for at fortsætte.</p>
+
+    <div class="login-box">
+        <label>
+            Brugernavn
+            <input type="text" id="loginUsername" placeholder="Brugernavn">
+        </label>
+
+        <label>
+            Kodeord
+            <input type="password" id="loginPassword" placeholder="Kodeord">
+        </label>
+
+        <button class="cta-btn" id="loginSubmitBtn" type="button">Log ind</button>
+    </div>
+
+    <p id="loginMsg" class="msg"></p>
+</main>
+
+<script src="./js/script.js" defer></script>
+</body>
+</html>

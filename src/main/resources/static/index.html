@@ -1,59 +1,23 @@
-  <!doctype html>
-  <html lang="da">
-  <head>
-    <meta charset="UTF-8">
-    <title>Ad Generator</title>
-    <link rel="stylesheet" href="css/main.css">
-  </head>
-  <body>
-  <h1>Ad Generator</h1>
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>AdTool – AI Ad Generator</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
 
-  <section class="ad-form">
-    <h2>Input</h2>
-    <form id="adForm">
-      <label>
-        Brandnavn:
-        <input id="brandInput" type="text" value="Marmalade Co.">
-      </label>
+<main class="hero">
+  <h1>Lav professionelle annoncer på få sekunder</h1>
 
-      <label>
-        Overskrift:
-        <textarea id="headlineInput">LAGERSALG PÅ\nUDVALGTE\nPRODUKTER</textarea>
-      </label>
+  <p class="subtitle">
+    AdTool bruger AI til at generere færdige reklamer klar til sociale medier.
+  </p>
 
-      <label>
-        Undertekst:
-        <input id="sublineInput" type="text" value="Kun i dag!!">
-      </label>
+  <button class="cta-btn" id="goToGeneratorBtn">Kom i gang</button>
+  <button class="cta-btn" id="goToLoginBtn">Log ind</button>
+</main>
 
-      <label>
-        Rabat-tekst:
-        <input id="discountInput" type="text" value="60% rabat">
-      </label>
-
-      <label>
-        Modeltekst:
-        <input id="sizeInfoInput" type="text" value="Modellen er 172 cm og bærer str. S">
-      </label>
-
-      <label>
-        Trustpilot-tekst:
-        <input id="trustInput" type="text" value="4,8 stjerner på Trustpilot">
-      </label>
-
-      <button type="button" id="generateImageBtn">Generér billede med AI</button>
-    </form>
-  </section>
-
-  <section class="ad-preview">
-    <h2>AI Preview</h2>
-
-    <!-- Her viser vi kun det endelige AI-billede -->
-    <img id="aiImage"
-         alt="AI-genereret annonce"
-         style="max-width: 100%; height: auto; border-radius: 8px; display: none;">
-  </section>
-
-  <script src="js/script.js"></script>
-  </body>
-  </html>
+<script src="./js/script.js" defer></script>
+</body>
+</html>
