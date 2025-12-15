@@ -1,82 +1,72 @@
 const BACKEND_URL = "http://localhost:8081/api";
 
-const form = document.getElementById('adForm');
+console.log("script.js loaded ✅ (AI-only)");
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+const generateImageBtn = document.getElementById("generateImageBtn");
+const aiImage = document.getElementById("aiImage");
 
-    const brand = document.getElementById('brandInput').value;
-    const headlineRaw = document.getElementById('headlineInput').value;
-    const subline = document.getElementById('sublineInput').value;
-    const discount = document.getElementById('discountInput').value;
-    const sizeInfo = document.getElementById('sizeInfoInput').value;
-    const trust = document.getElementById('trustInput').value;
-    const imageFile = document.getElementById('imageInput').files[0];
+if (!generateImageBtn) console.error("Mangler #generateImageBtn i HTML");
+if (!aiImage) console.error("Mangler #aiImage i HTML");
 
-    // Beholder \n → <br> konverteringen
-    const headlineHtml = headlineRaw.split("\\n").join("<br>");
+let currentImageUrl = null;
 
-    // Preview opdatering
-    document.getElementById('brandName').textContent = brand;
-    document.getElementById('subline').textContent = subline;
-    document.getElementById('discountText').textContent = discount;
-    document.getElementById('sizeInfo').textContent = sizeInfo;
-    document.getElementById('trustText').textContent = trust;
-    document.getElementById('headline').innerHTML = headlineHtml;
+function val(id) {
+    const el = document.getElementById(id);
+    if (!el) console.error(`Mangler #${id} i HTML`);
+    return el?.value?.trim() || "";
+}
 
-    // Lokalt billede preview
-    if (imageFile) {
-        const url = URL.createObjectURL(imageFile);
-        document.getElementById('productImage').src = url;
-    }
+generateImageBtn?.addEventListener("click", async () => {
+    console.log("Generate image button clicked ✅");
 
-    // ⚠️ OPDATERET PAYLOAD – matcher din nye AdRequest
-    const payload = {
-        brand: brand,
-        headline: headlineRaw,
-        subline: subline,
-        discount: discount,
-        sizeInfo: sizeInfo,
-        trustText: trust,
+    const brand = val("brandInput");
+    const headline = val("headlineInput");
+    const subline = val("sublineInput");
+    const discountText = val("discountInput");
+    const trustText = val("trustInput");
+    const modelInfo = val("sizeInfoInput");
 
-        // Prompt er valgfri → backend/AI kan bruge det senere
-        prompt: `
-Brand: ${brand}
-Headline: ${headlineRaw}
-Subline: ${subline}
-Discount: ${discount}
-SizeInfo: ${sizeInfo}
-TrustText: ${trust}
-`.trim()
-    };
+    const url =
+        `${BACKEND_URL}/ads/ai/image` +
+        `?brand=${encodeURIComponent(brand)}` +
+        `&headline=${encodeURIComponent(headline)}` +
+        `&subline=${encodeURIComponent(subline)}` +
+        `&discountText=${encodeURIComponent(discountText)}` +
+        `&trustText=${encodeURIComponent(trustText)}` +
+        `&modelInfo=${encodeURIComponent(modelInfo)}`;
+
+    console.log("Calling:", url);
 
     try {
-        const response = await fetch(`${BACKEND_URL}/ads/generate`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+        generateImageBtn.disabled = true;
+        generateImageBtn.textContent = "Genererer…";
+
+        const response = await fetch(url);
+
+        console.log("Status:", response.status, "Content-Type:", response.headers.get("content-type"));
 
         if (!response.ok) {
-            throw new Error("Fejl ved backend-call");
+            const text = await response.text().catch(() => "");
+            console.error("Backend error body:", text);
+            throw new Error("Image endpoint returned " + response.status);
         }
 
-        const data = await response.json();
+        const blob = await response.blob();
+        console.log("Blob:", { size: blob.size, type: blob.type });
 
-        // Backend kan overskrive felterne – ellers bruger vi fallback
-        document.getElementById('brandName').textContent = data.brandName || brand;
+        if (currentImageUrl) URL.revokeObjectURL(currentImageUrl);
+        currentImageUrl = URL.createObjectURL(blob);
 
-        const finalHeadline = data.headline || headlineRaw;
-        document.getElementById('headline').innerHTML = finalHeadline.split("\\n").join("<br>");
+        aiImage.style.display = "block";
+        aiImage.src = currentImageUrl;
 
-        document.getElementById('subline').textContent = data.subline || subline;
-        document.getElementById('discountText').textContent = data.discountText || discount;
-        document.getElementById('sizeInfo').textContent = data.sizeInfo || sizeInfo;
-        document.getElementById('trustText').textContent = data.trustText || trust;
+        console.log("Image shown ✅", currentImageUrl);
 
     } catch (err) {
-        console.error(err);
+        console.error("Image generation failed:", err);
+        alert("Fejl ved billedgenerering – se console");
+    } finally {
+        generateImageBtn.disabled = false;
+        generateImageBtn.textContent = "Generér billede med AI";
     }
 });
