@@ -42,7 +42,7 @@
         })
             .then(response => {
                 if (response.status === 200) {
-                    return respone.json();
+                    return response.json();
                 } else {
                     throw new Error("Login failed");
                 }
