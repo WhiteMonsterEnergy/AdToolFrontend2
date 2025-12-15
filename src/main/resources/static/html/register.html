@@ -48,7 +48,10 @@
                 // check if backend responds successfully
                 if (response.ok) {
                     message.textContent = "Registration successful";
-                } else {
+                } else if (response.status === 400) {
+                    message.textContext = "Username already in use";
+
+            } else {
                     message.textContent = "Registration failed";
                 }
             })
