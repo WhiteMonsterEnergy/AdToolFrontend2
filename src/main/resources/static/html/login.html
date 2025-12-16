@@ -33,7 +33,7 @@
             passwordHash: document.getElementById("password").value
         };
 
-        fetch("http://localhost:8080/api/profile/login", {
+        fetch("http://localhost:8081/api/profile/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -48,7 +48,7 @@
                 }
             })
             .then(profile => {
-                localStorage.setItem("username", profile.name);
+                localStorage.setItem("token", data.token);
                 window.location.href = "dashboard.html";
             })
             .catch(error => {
