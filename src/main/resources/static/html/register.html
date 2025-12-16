@@ -52,8 +52,7 @@
                     message.textContent = "Username already in use";
 
             } else {
-                    message.textContent = "Registration failed";
-                }
+                    message.textContent = "Registration failed (" + response.status + ")";                }
             })
             .catch(() => {
                 // handles network errors
