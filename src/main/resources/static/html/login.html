@@ -48,7 +48,8 @@
                 }
             })
             .then(profile => {
-                document.getElementById("message").innerText = "Login successful. Welcome, " + profile.name;
+                localStorage.setItem("username", profile.name);
+                window.location.href = "dashboard.html";
             })
             .catch(error => {
                 document.getElementById("message").innerText = error.message;
