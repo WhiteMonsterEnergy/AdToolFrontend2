@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+</head>
+<body>
+
+<h1> Register new user</h1>
+<!-- registration form -->
+<form id="registerForm">
+  <div>
+    <label for="name">Username:</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+  </div>
+  <button type="submit">Register</button>
+</form>
+
+<!-- feedback message -->
+<p id="message"></p>
+
+<script>
+  const form = document.getElementById("registerForm");
+  const message = document.getElementById("message");
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const data = {
+      name: document.getElementById("name").value,
+      passwordHash: document.getElementById("password").value
+    };
+// POST request to backend
+    fetch("http://localhost:8081/api/profile/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      // here the JavaScript object is converted to JSON string
+      body: JSON.stringify(data)
+    })
+            .then(response => {
+              // check if backend responds successfully
+              if (response.ok) {
+                message.textContent = "Registration successful";
+              } else if (response.status === 400) {
+                message.textContent = "Username already in use";
+
+              } else {
+                message.textContent = "Registration failed (" + response.status + ")";                }
+            })
+            .catch(() => {
+              // handles network errors
+              message.textContent = "Server error";
+            });
+  });
+
+</script>
+</body>
+</html>
