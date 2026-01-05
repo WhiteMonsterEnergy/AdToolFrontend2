@@ -7,6 +7,15 @@
 </head>
 <body>
 
+<header class="top-bar">
+    <div class="logo">AdTool</div>
+
+    <div>
+        <a href="dashboard.html" class="back-link">Dashboard</a>
+        <a href="index.html" class="back-link">← Tilbage</a>
+    </div>
+</header>
+
 <h1>Ad Generator</h1>
 
 <section class="ad-form">
@@ -44,7 +53,9 @@ PRODUKTER</textarea>
             <input id="trustInput" type="text" value="4,8 stjerner på Trustpilot">
         </label>
 
-        <button type="button" id="generateImageBtn">Generér billede med AI</button>
+        <button type="button" id="generateImageBtn">
+            Generér billede med AI
+        </button>
     </form>
 </section>
 
@@ -55,7 +66,10 @@ PRODUKTER</textarea>
          alt="AI-genereret annonce"
          style="max-width: 100%; height: auto; border-radius: 8px; display: none;">
 
-    <button type="button" class="cta-btn" id="saveAdBtn" style="display: none; margin-top: 16px;">
+    <button type="button"
+            class="cta-btn"
+            id="saveAdBtn"
+            style="display: none; margin-top: 16px;">
         Gem annonce
     </button>
 </section>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>AdTool – Dashboard</title>
+
+    <!-- Fælles stylesheet -->
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="logo">AdTool</div>
+    <a href="generateAds.html" class="back-link">← Generér annonce</a>
+</header>
+
+<section class="hero">
+    <h1>Mine gemte reklamer</h1>
+    <p class="subtitle">
+        Her kan du se alle reklamer, du har gemt.
+        Billederne hentes direkte fra databasen.
+    </p>
+</section>
+
+<section class="ad-preview">
+    <h2>Dashboard</h2>
+
+    <div id="dashboardGrid"
+         style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:18px;">
+        <!-- Cards indsættes via JS -->
+    </div>
+
+    <p id="dashboardEmptyMsg" class="msg" style="display:none;">
+        Du har ingen gemte reklamer endnu.
+    </p>
+</section>
+
+<!-- Fælles script -->
+<script src="./js/script.js"></script>
+
+</body>
+</html>

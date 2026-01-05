@@ -32,7 +32,7 @@ function blobToBase64(blob) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onerror = () => reject(new Error("Kunne ikke læse blob som base64"));
-        reader.onload = () => resolve(reader.result); // data:image/png;base64,...
+        reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(blob);
     });
 }
@@ -72,16 +72,12 @@ generateImageBtn?.addEventListener("click", async () => {
         const blob = await response.blob();
         lastBlob = blob;
 
-        // 1) Log selve blobben (metadata + størrelse/type)
         console.log("Blob:", blob);
         console.log("Blob type:", blob.type, "size:", blob.size);
 
-        // 2) Log base64 (som data-url). OBS: det kan være langt, så vi logger kun starten.
         const base64DataUrl = await blobToBase64(blob);
         console.log("Base64 (start):", base64DataUrl.slice(0, 200) + "...");
         lastBase64 = base64DataUrl;
-        // Hvis du vil have HELE base64’en (kan spamme console):
-        // console.log("Base64 (full):", base64DataUrl);
 
         if (currentImageUrl) URL.revokeObjectURL(currentImageUrl);
         currentImageUrl = URL.createObjectURL(blob);
@@ -112,13 +108,11 @@ saveAdBtn?.addEventListener("click", async () => {
             alert("Generér et billede først.");
             return;
         }
+
         console.log(lastBase64);
+
         saveAdBtn.disabled = true;
         saveAdBtn.textContent = "Gemmer…";
-
-        // Hvis du også vil logge base64 ved gem (samme metode):
-        // const base64DataUrl = await blobToBase64(lastBlob);
-        // console.log("Saving base64 (start):", base64DataUrl.slice(0, 200) + "...");
 
         const formData = new FormData();
         formData.append("image", lastBlob, "ad.png");
@@ -150,3 +144,68 @@ saveAdBtn?.addEventListener("click", async () => {
         saveAdBtn.textContent = "Gem annonce";
     }
 });
+
+
+const dashboardGrid = document.getElementById("dashboardGrid");
+const dashboardEmptyMsg = document.getElementById("dashboardEmptyMsg");
+
+if (dashboardGrid) {
+    const PROFILE_ID = 1;
+
+    fetch(`${BACKEND_URL}/ads/dashboard`, {
+        headers: {
+            "X-Profile-Id": PROFILE_ID
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Dashboard fetch failed");
+            }
+            return res.json();
+        })
+        .then(ads => {
+            if (!ads || ads.length === 0) {
+                dashboardEmptyMsg.style.display = "block";
+                return;
+            }
+
+            ads.forEach(ad => {
+                const card = document.createElement("div");
+                card.className = "dashboard-card";
+
+                const imageUrl = `${BACKEND_URL}/ads/${ad.id}/image`;
+
+                // Hele kortet skal være klikbart -> åbner billedet i ny tab
+                card.style.cursor = "pointer";
+                card.addEventListener("click", () => {
+                    window.open(imageUrl, "_blank", "noopener");
+                });
+
+                // Vi wrapper også billedet i et link, så almindeligt klik på img også føles naturligt
+                const link = document.createElement("a");
+                link.href = imageUrl;
+                link.target = "_blank";
+                link.rel = "noopener";
+                link.style.display = "block";
+
+                const img = document.createElement("img");
+                img.src = imageUrl;
+                img.alt = "Annonce";
+
+                link.appendChild(img);
+
+                const meta = document.createElement("div");
+                meta.className = "dashboard-meta";
+                meta.textContent = new Date(ad.createdAt).toLocaleString();
+
+                card.appendChild(link);
+                card.appendChild(meta);
+                dashboardGrid.appendChild(card);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            dashboardEmptyMsg.style.display = "block";
+            dashboardEmptyMsg.textContent = "Kunne ikke indlæse dashboard.";
+        });
+}
